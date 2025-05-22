@@ -1,0 +1,20 @@
+version: v1
+service: aesthetic-scorer
+build:
+  type: docker
+  context: .
+  dockerfile: Dockerfile
+  platform: linux/amd64
+  registry: docker.io
+  repository: knight44/aesthetic-service
+  tag: latest
+deploy:
+  type: serverless
+  gpu_tier: A100-80GB-Flex
+  port: 8080
+  env:
+    - name: PYTHONUNBUFFERED
+      value: "1"
+routes:
+  - path: /predict
+    target: http://localhost:8080/predict
